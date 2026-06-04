@@ -1,0 +1,31 @@
+def generate_test_cases(report):
+
+    test_cases = []
+
+    # Basic test cases
+    test_cases.append("Verify homepage loads successfully")
+    test_cases.append("Verify website returns HTTP 200 status")
+
+    # Form related tests
+    if report.get("total_forms", 0) > 0:
+        test_cases.append("Verify form submission works correctly")
+        test_cases.append("Verify form validation for empty fields")
+
+    # Button tests
+    if report.get("total_buttons", 0) > 0:
+        test_cases.append("Verify all buttons redirect correctly")
+        test_cases.append("Verify button click actions")
+
+    # Link tests
+    if report.get("total_links", 0) > 0:
+        test_cases.append("Verify navigation links work correctly")
+
+    # Broken link tests
+    if report.get("broken_count", 0) > 0:
+        test_cases.append("Fix detected broken links and verify again")
+
+    # Accessibility checks
+    test_cases.append("Verify images have alt text for accessibility")
+    test_cases.append("Verify page layout is responsive")
+
+    return test_cases

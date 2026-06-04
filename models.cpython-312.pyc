@@ -1,0 +1,122 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="text-center text-white mt-5">
+  <h1 class="title">🚀 TestWise</h1>
+  <p>AI-Based Website Testing Platform</p>
+</div>
+
+<div class="card main-card p-4">
+  <form method="POST" onsubmit="showLoader()">
+    {% csrf_token %}
+
+    <div class="input-group">
+      <input
+        type="text"
+        name="url"
+        class="form-control"
+        placeholder="Enter Website URL"
+        required
+      />
+
+      <button class="btn btn-primary">Test Website</button>
+    </div>
+  </form>
+
+  <div class="text-center loader" id="loader">
+    <div class="spinner-border text-primary"></div>
+
+    <p>Testing Website... Please Wait</p>
+  </div>
+</div>
+
+{% if result %}
+
+<div class="card mt-4 p-4 main-card">
+  <h3>📊 Test Report</h3>
+
+  <div class="row text-center mt-3">
+    <div class="col-md-4">
+      <div class="card p-3 bg-light">
+        <h5>Buttons</h5>
+        <h3>{{ result.total_buttons }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3 bg-light">
+        <h5>Forms</h5>
+        <h3>{{ result.total_forms }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3 bg-light">
+        <h5>Links</h5>
+        <h3>{{ result.total_links }}</h3>
+      </div>
+    </div>
+  </div>
+
+  {% if result.ai_test_cases %}
+
+  <div class="mt-4">
+    <h4>🤖 AI Generated Test Cases</h4>
+
+    <ul class="list-group">
+      {% for tc in result.ai_test_cases %}
+
+      <li class="list-group-item">{{ tc }}</li>
+
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% endif %} {% if result.screenshot %}
+
+  <div class="mt-4">
+    <h4>📸 Screenshot</h4>
+
+    <img src="{{ result.screenshot }}" class="img-fluid screenshot" />
+  </div>
+
+  {% endif %} {% if result.broken_links %}
+
+  <div class="mt-4">
+    <h4>❌ Broken Links ({{ result.broken_count }})</h4>
+
+    <ul class="list-group">
+      {% for link, status in result.broken_links %}
+
+      <li class="list-group-item list-group-item-danger">
+        {{ link }} — Status: {{ status }}
+      </li>
+
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% else %}
+
+  <div class="alert alert-success mt-4">✅ No Broken Links Detected</div>
+
+  {% endif %}
+
+  <h5>Total Links Found</h5>
+  <h3>{{ result.total_links }}</h3>
+
+  <h5>Links Checked</h5>
+  <h3>{{ result.total_links_checked }}</h3>
+
+  <h5>Broken Links</h5>
+  <h3>{{ result.broken_count }}</h3>
+</div>
+
+{% endif %}
+
+<script>
+  function showLoader() {
+    document.getElementById("loader").style.display = "block";
+  }
+</script>
+
+{% endblock %}

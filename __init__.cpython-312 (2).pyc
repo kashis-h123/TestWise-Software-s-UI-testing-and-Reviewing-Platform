@@ -1,0 +1,15 @@
+from django.shortcuts import render
+from .website_tester import test_website
+
+def home(request):
+    result = None
+
+    if request.method == "POST":
+        url = request.POST.get("url")
+        result = test_website(url)
+
+    return render(request, "home.html", {"result": result})
+
+
+def index(request):
+    return render(request, "index.html")
